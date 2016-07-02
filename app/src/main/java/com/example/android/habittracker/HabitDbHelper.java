@@ -9,30 +9,34 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class HabitDbHelper extends SQLiteOpenHelper {
 
+    Context context;
     public HabitDbHelper(Context context) {
-
-        super(context, Habits.DB_NAME, null, Habits.DB_VERSION);
-
+        super(context, HabitsContract.DB_NAME, null, HabitsContract.DB_VERSION);
+        this.context = context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-        String createTable = "CREATE TABLE " + Habits.HabitEntry.TABLE + " ( " +
-                Habits.HabitEntry.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                Habits.HabitEntry.COL_HABIT_TITLE + " TEXT NOT NULL," +
-                Habits.HabitEntry.COL_HABIT_DAYS + " " +
+        String createTable = "CREATE TABLE " + HabitsContract.HabitContractEntry.TABLE + " ( " +
+                HabitsContract.HabitContractEntry.ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                HabitsContract.HabitContractEntry.COL_HABIT_TITLE + " TEXT NOT NULL," +
+                HabitsContract.HabitContractEntry.COL_HABIT_DAYS + " " +
                 "INTEGER NOT NULL );";
-
         db.execSQL(createTable);
     }
 
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        db.execSQL("DROP TABLE IF EXISTS " + Habits.HabitEntry.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + HabitsContract.HabitContractEntry.TABLE);
         onCreate(db);
-
     }
+
+    /**
+     * Delete the entire database
+     * @return true if the database was successfully deleted.
+     */
+    public boolean deleteDatabase(){
+        return context.deleteDatabase(HabitsContract.DB_NAME);
+    }
+
 }
